@@ -1,3 +1,5 @@
+package GameObjects;
+
 /*
 //////// Class_Ball Definition ////////
 	//Variables and Constants
@@ -24,6 +26,8 @@
 //////// End definition ////////
 */
 
+import GameObjects.GameObject;
+
 import java.awt.*;
 
 public class Ball
@@ -39,7 +43,7 @@ public class Ball
 	private int y;
 	private double dir;
 
-	//Player Constructors
+	//Ball Constuctor
 	public Ball()
 	{ 
 		//Variables
@@ -79,7 +83,7 @@ public class Ball
 	}
 	
 	//Method to calculate what the ball's new x and y values are, whether it's collided with something, and what it's new direction is if it has collided with something
-	public void calcMovement(int appHeight, int playerX, int playerY, int playerWidth, int playerHeight, int computerX, int computerY, int computerWidth, int computerHeight)
+	public void calcMovement(int appHeight, GameObject leftPaddle, GameObject rightPaddle)
 	{
 		x = (int)(x + Math.cos(dir) * MOVE_SPEED);
 		y = (int)(y + Math.sin(dir) * MOVE_SPEED);
@@ -97,17 +101,17 @@ public class Ball
 		}
 		
 		//Calculate collisions with player
-		if(((y + HEIGHT) >= playerY) && (y < (playerY + playerHeight)) && (x < (playerX + playerWidth)) && (x >= playerX))
+		if(((y + HEIGHT) >= leftPaddle.GetY()) && (y < (leftPaddle.GetY()+ leftPaddle.GetHeight())) && (x < (leftPaddle.GetX() + leftPaddle.GetWidth())) && (x >= leftPaddle.GetX()))
 		{
-			x = playerX + playerWidth;
-			dir = 0 + (((((y + HEIGHT/2) - (double)playerY)/(double)playerHeight)-0.5)*2*(Math.PI*3/8));
+			x = leftPaddle.GetX() + leftPaddle.GetWidth();
+			dir = 0 + (((((y + HEIGHT/2) - (double)leftPaddle.GetY())/(double)leftPaddle.GetHeight())-0.5)*2*(Math.PI*3/8));
 		}
 		
 		//Calculate collisions with computer
-		if(((y + HEIGHT) >= computerY) && (y < (computerY + computerHeight)) && ((x + WIDTH) >= computerX) && ((x + WIDTH) < (computerX + computerWidth)))
+		if(((y + HEIGHT) >= rightPaddle.GetY()) && (y < (rightPaddle.GetY() + rightPaddle.GetHeight())) && ((x + WIDTH) >= rightPaddle.GetX()) && ((x + WIDTH) < (rightPaddle.GetX() + rightPaddle.GetWidth())))
 		{
-			x = computerX - WIDTH;
-			dir = Math.PI - (((((y + HEIGHT/2) - (double)computerY)/(double)computerHeight)-0.5)*2*(Math.PI*3/8));
+			x = rightPaddle.GetX() - WIDTH;
+			dir = Math.PI - (((((y + HEIGHT/2) - (double)rightPaddle.GetY())/(double)rightPaddle.GetHeight())-0.5)*2*(Math.PI*3/8));
 		}
 		
 		//Keeps the dir within the range of 0 to 2Pi
