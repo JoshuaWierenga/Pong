@@ -17,9 +17,10 @@ public class ComputerPaddle extends GameObject
         color = Color.white;
         this.side = side;
         direction = PaddleDirection.STATIONARY;
+        winMessage = "Computer has won";
     }
 
-    public ComputerPaddle(Color paddleColor, BoardSide side, Dimension boardSize, Ball ball, int paddleSpeed, int paddleHeight, int paddleWidth)
+    public ComputerPaddle(Color paddleColor, BoardSide side, Dimension boardSize, Ball ball, int paddleSpeed, int paddleWidth, int paddleHeight)
     {
         this.ball = ball;
         moveSpeed = paddleSpeed;
@@ -29,6 +30,7 @@ public class ComputerPaddle extends GameObject
         color = paddleColor;
         this.side = side;
         direction = PaddleDirection.STATIONARY;
+        winMessage = "Computer has won";
     }
 
     public int GetX()
@@ -56,6 +58,10 @@ public class ComputerPaddle extends GameObject
         return color;
     }
 
+    public String GetWinMessage() {
+        return winMessage;
+    }
+
     public void Move()
     {
         if ((y + paddleSize.height/4) > (ball.getY() + ball.getHeight()/2))
@@ -66,7 +72,11 @@ public class ComputerPaddle extends GameObject
             direction = PaddleDirection.DOWN;
         }
 
-        if ((ball.getX() + ball.getWidth()/2) >= boardSize.width*2/3)
+        if (side == BoardSide.LEFT && (ball.getX() + ball.getWidth()/2) <= boardSize.width*1/3)
+        {
+            y += direction.getValue() * moveSpeed;
+        }
+        else if (side == BoardSide.RIGHT && (ball.getX() + ball.getWidth()/2) >= boardSize.width*2/3)
         {
             y += direction.getValue() * moveSpeed;
         }

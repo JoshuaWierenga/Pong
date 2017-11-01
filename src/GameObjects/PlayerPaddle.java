@@ -25,9 +25,10 @@ public class PlayerPaddle extends GameObject {
             upKey = KeyEvent.VK_UP;
             downKey = KeyEvent.VK_DOWN;
         }
+        winMessage = side.toString() + " paddle has won";
     }
 
-    public PlayerPaddle(Color paddleColor, BoardSide side,  Dimension boardSize, int paddleSpeed, int paddleHeight, int paddleWidth, char upKey, char downKey)
+    public PlayerPaddle(Color paddleColor, BoardSide side,  Dimension boardSize, int paddleSpeed, int paddleHeight, int paddleWidth, char upKey, char downKey, String winMessage)
     {
         moveSpeed = paddleSpeed;
         y = 320;
@@ -38,6 +39,7 @@ public class PlayerPaddle extends GameObject {
         direction = PaddleDirection.STATIONARY;
         this.upKey = upKey;
         this.downKey = downKey;
+        this.winMessage = winMessage;
     }
 
     public int GetX()
@@ -63,6 +65,10 @@ public class PlayerPaddle extends GameObject {
     public Color GetColour()
     {
         return color;
+    }
+
+    public String GetWinMessage() {
+        return winMessage;
     }
 
     public void Move()

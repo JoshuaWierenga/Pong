@@ -5,12 +5,12 @@ import java.awt.*;
 
 public abstract class GameObject {
 
-    int moveSpeed, y;
+    int moveSpeed, y, upKey, downKey;
     Dimension boardSize, paddleSize;
     Color color;
     BoardSide side;
     PaddleDirection direction;
-    int upKey, downKey;
+    String winMessage;
 
     public abstract int GetX();
 
@@ -27,4 +27,6 @@ public abstract class GameObject {
     public abstract void ManageInput(int keyCode);
 
     public abstract void ResetPosition();
+
+    public abstract String GetWinMessage();
 }
