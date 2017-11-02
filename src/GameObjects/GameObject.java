@@ -3,30 +3,54 @@ package GameObjects;
 import Enums.*;
 import java.awt.*;
 
-public abstract class GameObject {
-
-    int moveSpeed, y, upKey, downKey;
-    Dimension boardSize, paddleSize;
+public class GameObject
+{
+    int X, Y, originalX, originalY;
+    Dimension boardSize, objectSize;
     Color color;
-    BoardSide side;
-    PaddleDirection direction;
-    String winMessage;
 
-    public abstract int GetX();
+    public int GetX()
+    {
+        return X;
+    }
 
-    public abstract int GetY();
+    public int GetY()
+    {
+        return Y;
+    }
 
-    public abstract int GetWidth();
+    public int GetWidth()
+    {
+        return objectSize.width;
+    }
 
-    public abstract int GetHeight();
+    public int GetHeight()
+    {
+        return objectSize.height;
+    }
 
-    public abstract Color GetColour();
+    public Color GetColour()
+    {
+        return color;
+    }
 
-    public abstract void Move();
+    public void ResetPosition()
+    {
+        Y = originalY;
+    }
 
-    public abstract void ManageInput(int keyCode);
+    public void Move()
+    {
+        if(Y < 0)
+        {
+            Y = 0;
+        }
+        else if((Y + objectSize.height) >= boardSize.height)
+        {
+            Y = boardSize.height - objectSize.height;
+        }
+    }
 
-    public abstract void ResetPosition();
-
-    public abstract String GetWinMessage();
+    public void AddScore() {
+    }
 }

@@ -4,91 +4,52 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import Enums.*;
 
-public class PlayerPaddle extends GameObject {
+public class PlayerPaddle extends PaddleObject {
 
-    public PlayerPaddle(BoardSide side, Dimension boardSize)
+    int upKey, downKey;
+
+    public PlayerPaddle(BoardSide boardSide, Dimension boardDimensions)
     {
         moveSpeed = 16;
-        y = 320;
-        this.boardSize = boardSize;
-        this.paddleSize = new Dimension(32, 128);
-        color = Color.white;
-        this.side = side;
+        this.boardSide = boardSide;
+        boardSize = boardDimensions;
         direction = PaddleDirection.STATIONARY;
-        if (side == BoardSide.LEFT)
+        objectSize = new Dimension(32, 128);
+        X = originalX = boardSide.getPosition();
+        Y = originalY = 320;
+        color = Color.white;
+
+        if (this.boardSide == BoardSide.LEFT)
         {
             upKey = KeyEvent.VK_W;
             downKey = KeyEvent.VK_S;
         }
-        else if (side == BoardSide.RIGHT)
+        else
         {
             upKey = KeyEvent.VK_UP;
             downKey = KeyEvent.VK_DOWN;
         }
-        winMessage = side.toString() + " paddle has won";
     }
 
-    public PlayerPaddle(Color paddleColor, BoardSide side,  Dimension boardSize, int paddleSpeed, int paddleHeight, int paddleWidth, char upKey, char downKey, String winMessage)
+    public PlayerPaddle(BoardSide boardSide, Dimension boardDimensions, Color paddleColor, int paddleSpeed, int upKey, int downKey)
     {
         moveSpeed = paddleSpeed;
-        y = 320;
-        this.boardSize = boardSize;
-        this.paddleSize = new Dimension(paddleWidth, paddleHeight);
-        color = paddleColor;
-        this.side = side;
+        this.boardSide = boardSide;
+        boardSize = boardDimensions;
         direction = PaddleDirection.STATIONARY;
+        objectSize = new Dimension(32, 128);
+        X = originalX = boardSide.getPosition();
+        Y = originalY = 320;
+        color = paddleColor;
         this.upKey = upKey;
         this.downKey = downKey;
-        this.winMessage = winMessage;
     }
 
-    public int GetX()
-    {
-        return side.getPosition();
-    }
-
-    public int GetY()
-    {
-        return y;
-    }
-
-    public int GetWidth()
-    {
-        return paddleSize.width;
-    }
-
-    public int GetHeight()
-    {
-        return paddleSize.height;
-    }
-
-    public Color GetColour()
-    {
-        return color;
-    }
-
-    public String GetWinMessage() {
-        return winMessage;
-    }
-
+    @Override
     public void Move()
     {
-        y += direction.getValue() * moveSpeed;
-
-        if (y < 0)
-        {
-            y = 0;
-        }
-        else if ((y + paddleSize.height) > boardSize.height)
-        {
-            y = boardSize.height - paddleSize.height;
-        }
-    }
-
-    public void ResetPosition()
-    {
-        y = 320;
-        direction = PaddleDirection.STATIONARY;
+        Y += direction.getValue() * moveSpeed;
+        super.Move();
     }
 
     public void ManageInput(int keyCode)

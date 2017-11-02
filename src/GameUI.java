@@ -17,12 +17,9 @@ public class GameUI extends JPanel implements KeyListener
     private final Font TEXT_FONT = new Font("Arial", Font.BOLD, TEXT_HEIGHT);		//The font used for the game over text
     private final int WIN_SCORE = 10;					//The amount of points either player needs to win
 
-
     private boolean gameOver = false;
-    private int leftScore = 0;			//The current score of the left paddle
-    private int rightScore = 0;			//The current score of the right paddle
-    GameObject leftPaddle;
-    GameObject rightPaddle;
+    PaddleObject leftPaddle;
+    PaddleObject rightPaddle;
     Ball ball;
 
     public GameUI()
@@ -32,8 +29,7 @@ public class GameUI extends JPanel implements KeyListener
 
         addKeyListener(this);
         ball = new Ball();
-        leftPaddle = new ComputerPaddle(BoardSide.LEFT, getSize(), ball);
-        //rightPaddle = new ComputerPaddle(Color.white, BoardSide.RIGHT, getSize(), ball, 8, 32, 128) ;
+        leftPaddle = new PlayerPaddle(BoardSide.LEFT, getSize());
         rightPaddle = new ComputerPaddle(BoardSide.RIGHT, getSize(), ball);
 
         Timer timer = new Timer(13, new ActionListener() {
@@ -42,14 +38,14 @@ public class GameUI extends JPanel implements KeyListener
             {
                 if (ball.getX() >= APP_WIDTH) {
                     leftPaddle.ResetPosition();
+                    leftPaddle.AddScore();
                     rightPaddle.ResetPosition();
                     ball.reset();
-                    leftScore++;
                 } else if ((ball.getX() + ball.getWidth()) <= 0) {
                     leftPaddle.ResetPosition();
                     rightPaddle.ResetPosition();
+                    rightPaddle.AddScore();
                     ball.reset();
-                    rightScore++;
                 }
 
                 repaint();
@@ -89,27 +85,18 @@ public class GameUI extends JPanel implements KeyListener
         g.setColor(BACKGROUND_COLOUR);
         g.fillRect(0, 0, getWidth(), getHeight());
 
-        if (gameOver)
+        if (leftPaddle.GetScore() >= WIN_SCORE || rightPaddle.GetScore() >= WIN_SCORE)
         {
             g.setColor(TEXT_COLOUR);
             g.setFont(TEXT_FONT);
 
-            String gameOverText;
-
-            if(leftScore == WIN_SCORE)
-            {
-
-                gameOverText  = leftPaddle.GetWinMessage();
-            }
-            else
-            {
-                gameOverText = rightPaddle.GetWinMessage();
-            }
+            String gameOverText = ((leftPaddle.GetScore() >= WIN_SCORE) ? "left" : "right") + " paddle has won";
 
             FontMetrics fontMetrics = getFontMetrics(TEXT_FONT);
             Rectangle2D textSize = fontMetrics.getStringBounds(gameOverText, g);
             int x = (int)((getWidth()) - textSize.getWidth())/2;
             int y = (int)(getHeight() - textSize.getHeight())/2 + fontMetrics.getAscent();
+
             g.drawString(gameOverText, x, y);
         }
         else {
@@ -126,11 +113,11 @@ public class GameUI extends JPanel implements KeyListener
             g.fillOval(ball.getX(), ball.getY(), ball.getWidth(), ball.getHeight());
 
             g.setColor(SCORE_COLOUR);
-            for (int i = 0; i < leftScore; i++) {
+            for (int i = 0; i < leftPaddle.GetScore(); i++) {
                 g.fillRect(96 + i * 12, 32, 4, 32);
             }
 
-            for (int i = 0; i < rightScore; i++) {
+            for (int i = 0; i < rightPaddle.GetScore(); i++) {
                 g.fillRect(804 + i * 12, 32, 4, 32);
             }
         }
